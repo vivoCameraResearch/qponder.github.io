@@ -1,1 +1,1823 @@
-hello!
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-55V1E709SK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-55V1E709SK');
+  </script>
+
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Q-Ponder: A Unified Training Pipeline for Reasoning-based Visual Quality Assessment. ">
+  <meta name="keywords" content="PVDiffusion">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Q-Ponder: A Unified Training Pipeline for Reasoning-based Visual Quality Assessment
+  </title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  
+  <style>
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+      25% {
+        background-position: 25% 75%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      75% {
+        background-position: 75% 25%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    .animated-gradient {
+      background: linear-gradient(
+        45deg,
+        #ff6b6b 0%,
+        #4ecdc4 20%,
+        #45b7d1 40%,
+        #96ceb4 60%,
+        #feca57 80%,
+        #ff6b6b 100%
+      );
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: bolder;
+      animation: gradientMove 4s ease-in-out infinite;
+      display: inline-block;
+    }
+    
+    /* Fallback for browsers that don't support background-clip: text */
+    @supports not (-webkit-background-clip: text) {
+      .animated-gradient {
+        background: none;
+        color: #ff6b6b;
+      }
+    }
+    
+    /* Custom styling for enhanced layout */
+    body {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 25%, #90caf9 50%, #64b5f6 75%, #42a5f5 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* Ensure proper viewport handling */
+    * {
+      box-sizing: border-box;
+    }
+    
+    /* Force everything to stay within viewport */
+    .hero, .section, .container, .columns, .column {
+      max-width: 100% !important;
+      overflow-x: hidden !important;
+    }
+    
+    .hero {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px) saturate(120%);
+      -webkit-backdrop-filter: blur(20px) saturate(120%);
+      border-radius: 25px;
+      margin: 1rem 2vw;
+      width: calc(100% - 4vw);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 
+                  0 0 0 1px rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      overflow: hidden;
+    }
+    
+    .section {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(15px) saturate(120%);
+      -webkit-backdrop-filter: blur(15px) saturate(120%);
+      margin: 1rem 2vw;
+      width: calc(100% - 4vw);
+      border-radius: 20px !important;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 
+                  0 0 0 1px rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      overflow: hidden;
+      -webkit-border-radius: 20px !important;
+      -moz-border-radius: 20px !important;
+    }
+    
+    .publication-title {
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      line-height: 1.3;
+    }
+    
+    .publication-authors {
+      color: #000000 !important;
+      font-weight: bold;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+    
+    .publication-authors a {
+      color: #000000 !important;
+      font-weight: bold;
+      text-decoration: none;
+      font-family: inherit;
+    }
+    
+    .publication-authors a:hover {
+      color: #333333 !important;
+      text-decoration: underline;
+    }
+    
+    .subtitle {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px) saturate(110%);
+      -webkit-backdrop-filter: blur(10px) saturate(110%);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin: 1rem 0;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .button {
+      transition: all 0.3s ease;
+      transform: translateY(0);
+    }
+    
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+    
+    .title.is-3 {
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    .title.is-3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      border-radius: 2px;
+    }
+    
+    .content img {
+      border-radius: 15px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .content img:hover {
+      transform: scale(1.02) translateY(-2px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+    
+    .link-block {
+      margin: 0.5rem;
+    }
+    
+    /* Enhanced glassmorphism for text content */
+    .content p {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Carousel Styles */
+    .carousel-container {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px) saturate(120%);
+      -webkit-backdrop-filter: blur(20px) saturate(120%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    .carousel-item {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      pointer-events: none;
+    }
+
+    .carousel-item.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .carousel-item.prev {
+      transform: translateX(-50px);
+    }
+
+    .carousel-content {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Dot Indicators */
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(103, 126, 234, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dot:hover {
+      transform: scale(1.2);
+      background: rgba(103, 126, 234, 0.6);
+      border-color: rgba(103, 126, 234, 0.8);
+    }
+
+    .dot.active {
+      background: linear-gradient(45deg, #667eea, #764ba2);
+      border-color: #667eea;
+      transform: scale(1.3);
+      box-shadow: 0 0 20px rgba(103, 126, 234, 0.6);
+    }
+
+    .dot.active::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 6px;
+      height: 6px;
+      background: white;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      50% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(1.2);
+      }
+    }
+
+    /* Carousel Arrows */
+    .carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(15px) saturate(120%);
+      -webkit-backdrop-filter: blur(15px) saturate(120%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      opacity: 0.8;
+    }
+
+    .carousel-arrow:hover {
+      opacity: 1;
+      transform: translateY(-50%) scale(1.1);
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .carousel-arrow-left {
+      left: 20px;
+    }
+
+    .carousel-arrow-right {
+      right: 20px;
+    }
+
+    .carousel-arrow i {
+      font-size: 18px;
+      color: #667eea;
+      transition: all 0.3s ease;
+    }
+
+    .carousel-arrow:hover i {
+      color: #764ba2;
+      transform: scale(1.1);
+    }
+
+    .carousel-arrow:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    /* Analysis Button Styles */
+    .analysis-btn:hover {
+      transform: translateY(-2px);
+      opacity: 1 !important;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .analysis-btn.active {
+      opacity: 1 !important;
+      transform: scale(1.05);
+    }
+
+    .analysis-content {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive carousel for mobile */
+    @media (max-width: 768px) {
+      .carousel-content {
+        flex-direction: column !important;
+        text-align: center !important;
+      }
+      
+      .carousel-image {
+        padding-right: 0 !important;
+        margin-bottom: 1rem;
+      }
+      
+      .carousel-text {
+        text-align: center !important;
+      }
+
+      .carousel-arrow {
+        width: 40px;
+        height: 40px;
+      }
+
+      .carousel-arrow-left {
+        left: 10px;
+      }
+
+      .carousel-arrow-right {
+        right: 10px;
+      }
+
+      .carousel-arrow i {
+        font-size: 14px;
+      }
+    }
+    
+    .publication-links {
+      background: rgba(255, 255, 255, 0.8) !important;
+      backdrop-filter: blur(12px) saturate(110%) !important;
+      -webkit-backdrop-filter: blur(12px) saturate(110%) !important;
+      border: 1px solid rgba(255, 255, 255, 0.4) !important;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12) !important;
+    }
+    
+
+    
+    /* Smooth scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* Container padding adjustment */
+    .container.is-max-desktop {
+      padding: 1.5rem 0.5rem;
+      max-width: none;
+      width: 100%;
+    }
+    
+    /* Ensure all cards inherit section styling and have proper containment */
+    .motivation-card, .abstract-card, .method-card, .features-card, 
+    .results-card, .training-card, .performance-card {
+      border-radius: inherit;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    
+    /* Fix content overflow issues */
+    .content {
+      border-radius: inherit;
+      overflow: visible;
+    }
+    
+    .content img {
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Ensure columns don't cause overflow */
+    .columns {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    
+    .column {
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
+    }
+    
+    /* Ensure no horizontal scrolling */
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/script.js"></script>
+
+  <!-- Carousel Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      let currentIndex = 0;
+      const items = document.querySelectorAll('.carousel-item');
+      const dots = document.querySelectorAll('.dot');
+      const totalItems = items.length;
+
+      function showSlide(index) {
+        // Remove active class from all items and dots
+        items.forEach((item, i) => {
+          item.classList.remove('active', 'prev');
+          if (i < index) {
+            item.classList.add('prev');
+          }
+        });
+        dots.forEach(dot => dot.classList.remove('active'));
+
+        // Add active class to current item and dot
+        if (items[index]) {
+          items[index].classList.add('active');
+        }
+        if (dots[index]) {
+          dots[index].classList.add('active');
+        }
+
+        currentIndex = index;
+      }
+
+      function nextSlide() {
+        const nextIndex = (currentIndex + 1) % totalItems;
+        showSlide(nextIndex);
+      }
+
+      function prevSlide() {
+        const prevIndex = (currentIndex - 1 + totalItems) % totalItems;
+        showSlide(prevIndex);
+      }
+
+      // Dot click handlers
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          showSlide(index);
+        });
+      });
+
+      // Arrow click handlers
+      const leftArrow = document.querySelector('.carousel-arrow-left');
+      const rightArrow = document.querySelector('.carousel-arrow-right');
+
+      if (leftArrow) {
+        leftArrow.addEventListener('click', prevSlide);
+      }
+
+      if (rightArrow) {
+        rightArrow.addEventListener('click', nextSlide);
+      }
+
+      // Auto-play carousel (optional)
+      // setInterval(nextSlide, 5000);
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          prevSlide();
+        } else if (e.key === 'ArrowRight') {
+          nextSlide();
+        }
+      });
+
+      // Touch/swipe support for mobile
+      let startX = 0;
+      let startY = 0;
+      const carouselContainer = document.querySelector('.carousel-container');
+
+      carouselContainer.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      });
+
+      carouselContainer.addEventListener('touchend', (e) => {
+        if (!startX || !startY) return;
+
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+        const diffX = startX - endX;
+        const diffY = startY - endY;
+
+        // Only trigger if horizontal swipe is more significant than vertical
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+          if (diffX > 0) {
+            nextSlide(); // Swipe left - next slide
+          } else {
+            prevSlide(); // Swipe right - previous slide
+          }
+        }
+
+        startX = 0;
+        startY = 0;
+      });
+
+      // Initialize first slide
+      showSlide(0);
+    });
+
+    // Analysis Button Controls
+    document.addEventListener('DOMContentLoaded', function() {
+      const analysisButtons = document.querySelectorAll('.analysis-btn');
+
+      function showAnalysis(target, container) {
+        // Hide all content blocks in this container
+        const analysisContents = container.querySelectorAll('.analysis-content');
+        analysisContents.forEach(content => {
+          content.style.display = 'none';
+          content.classList.remove('active');
+        });
+
+        // Remove active class from all buttons in this container
+        const buttons = container.querySelectorAll('.analysis-btn');
+        buttons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.style.opacity = '0.7';
+        });
+
+        // Show target content
+        const targetContent = document.getElementById(target);
+        if (targetContent) {
+          targetContent.style.display = 'block';
+          targetContent.classList.add('active');
+          
+          // Add fade-in animation
+          targetContent.style.opacity = '0';
+          setTimeout(() => {
+            targetContent.style.opacity = '1';
+            targetContent.style.transition = 'opacity 0.3s ease-in-out';
+          }, 10);
+        }
+
+        // Activate clicked button
+        const activeButton = container.querySelector(`[data-target="${target}"]`);
+        if (activeButton) {
+          activeButton.classList.add('active');
+          activeButton.style.opacity = '1';
+        }
+      }
+
+      // Add click handlers to buttons
+      analysisButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const target = button.getAttribute('data-target');
+          const container = button.closest('.carousel-text');
+          showAnalysis(target, container);
+        });
+      });
+
+      // Initialize each carousel item with its low-level analysis
+      for (let i = 1; i <= 10; i++) {
+        const carouselItem = document.querySelector(`[data-index="${i-1}"]`);
+        if (carouselItem) {
+          const container = carouselItem.querySelector('.carousel-text');
+          if (container) {
+            showAnalysis(`low-level-${i}`, container);
+          }
+        }
+      }
+    });
+  </script>
+
+</head>
+
+<body>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <!-- <img src="static/images/logo.png" style="height:90px"></img>  -->
+            <h1 class="title is-1 publication-title"><span class="animated-gradient" style="font-size: 1.4em;">Q-Ponder</span>: A Unified Training Pipeline for Reasoning-based <span class="animated-gradient">V</span>isual <span class="animated-gradient">Q</span>uality <span class="animated-gradient">A</span>ssessment</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">  
+                <a href=""><strong>Zhuoxuan Cai</strong></a><sup>1,2</sup>,</span>
+              <span class="author-block">
+                <a href=""><strong>Jian Zhang</strong></a><sup>2</sup><sup>⭐</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=Be26Qu8AAAAJ&hl=en"><strong>Xinbin Yuan</strong></a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://pengtaojiang.github.io/"><strong>Peng-Tao Jiang</strong></a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href=""><strong>Wenxiang Chen</strong></a><sup>1</sup>,</span>
+              <br>
+              <span class="author-block">
+                <a href=""><strong>Bowen Tang</strong></a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=3GO1XjkAAAAJ&hl=zh-CN&oi=ao"><strong>Lujian Yao</strong></a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href=""><strong>Qiyuan Wang</strong></a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href=""><strong>Jinwei Chen</strong></a><sup>2</sup>,</span>
+              <span class="author-block">
+                <a href="https://scholar.google.co.jp/citations?user=NVzQ87sAAAAJ&hl=zh-CN"><strong>Bo Li</strong></a><sup>2</sup><sup>✉️</sup></span>
+          </div>
+
+            <!-- Institution Information -->
+            <div class="is-size-5" style="margin: 1.5rem 0; background: none; border: none; box-shadow: none; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+              <sup>1</sup> Fudan University  
+            <sup>2</sup> vivo Mobile Communication Co., Ltd<br>
+              ⭐ Project Lead  
+              ✉️ Corresponding Authors
+          </div>
+
+            <!-- Publication Links -->
+            <div class="column has-text-centered" style="margin-top: 1rem;">
+              <div class="columns is-multiline is-centered">
+                <div class="column is-narrow">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                    <a href="https://arxiv.org/pdf/2506.05384"
+                       class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon" style="background: linear-gradient(45deg, #ff6b6b, #ee5a24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                          <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Paper</span>
+                    </a>
+                  </span>
+                </div>
+                <div class="column is-narrow">
+                  <!-- arXiv Link. -->
+                  <span class="link-block">
+                    <a href="https://arxiv.org/abs/2506.05384"
+                 class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon" style="background: linear-gradient(45deg, #fd79a8, #e84393); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    <i class="ai ai-arxiv"></i>
+                </span>
+                <span>arXiv</span>
+              </a>
+            </span>
+                </div>
+                <div class="column is-narrow">
+              <!-- Code Link. -->
+              <span class="link-block">
+                    <a href="https://github.com/vivoCameraResearch/Q-Ponder"
+                  class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon" style="background: linear-gradient(45deg, #00b894, #00cec9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                </a>
+                  </span>
+                </div>
+                <div class="column is-narrow">
+                  <!-- Weights Link. -->
+                  <span class="link-block">
+                    <a href="#"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon" style="background: linear-gradient(45deg, #6c5ce7, #a29bfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        <i class="fas fa-weight-hanging"></i>
+                      </span>
+                      <span>Weights</span>
+                    </a>
+                  </span>
+                </div>
+                <div class="column is-narrow">
+                  <!-- Data Link. -->
+                  <span class="link-block">
+                    <a href="#"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon" style="background: linear-gradient(45deg, #fdcb6e, #e17055); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        <i class="fas fa-database"></i>
+                      </span>
+                      <span>Data</span>
+                    </a>
+                  </span>
+                </div>
+                <div class="column is-narrow">
+                  <!-- Demo Link. -->
+                  <span class="link-block">
+                    <a href="#"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon" style="background: linear-gradient(45deg, #74b9ff, #0984e3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                        <i class="fas fa-play-circle"></i>
+                      </span>
+                      <span>Demo</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+    </div>
+    </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- Dynamic Showcase Section -->
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column" style="width: 95%; max-width: 1600px;">
+          <div class="showcase-card" style="padding: 2.5rem; position: relative; overflow: hidden;">
+            <h2 class="title is-3"><span style="color: #000000; font-weight: bolder;">Reasoning Across Different Visual Contents</span></h2>
+            
+            <!-- Carousel Container -->
+            <div class="carousel-container" style="position: relative; height: 460px; border-radius: 20px; overflow: hidden; margin: 2rem 0;">
+              
+              <!-- Left Arrow -->
+              <div class="carousel-arrow carousel-arrow-left">
+                <i class="fas fa-chevron-left"></i>
+              </div>
+              
+              <!-- Right Arrow -->
+              <div class="carousel-arrow carousel-arrow-right">
+                <i class="fas fa-chevron-right"></i>
+              </div>
+              
+              <!-- Carousel Items -->
+              <div class="carousel-item active" data-index="0">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/1.png" alt="Visual Quality Analysis Case 1" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    
+                    <!-- Score Box -->
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">89.0585</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    
+                    <!-- Analysis Control Buttons -->
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-1" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">
+                        Low-level
+                      </button>
+                      <button class="analysis-btn" data-target="high-level-1" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">
+                        High-level
+                      </button>
+                      <button class="analysis-btn" data-target="overall-1" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">
+                        Overall
+                      </button>
+                    </div>
+
+                    <!-- Analysis Content Container -->
+                    <div class="analysis-content-container">
+                      
+                      <!-- Low-level Analysis Block -->
+                      <div class="analysis-content active" id="low-level-1" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure appear well-managed, with a balanced distribution of light across the scene. The ladybug and flower are neither underexposed nor overexposed. The contrast is adequate, providing sufficient differentiation between the bright yellow petals and the dark green background. However, there seems to be a slight softness in the overall sharpness and detail preservation, possibly due to motion blur or camera shake, which slightly reduces the clarity of fine details like the texture of the ladybug's shell and the flower's petals.</p>
+                      </div>
+
+                      <!-- High-level Analysis Block -->
+                      <div class="analysis-content" id="high-level-1" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is high, with the ladybug sharply in focus relative to the blurred background, creating a pleasing bokeh effect that separates the subject from its surroundings. The composition utilizes the rule of thirds effectively, placing the ladybug off-center to draw attention naturally while leaving room for the viewer's eye to rest. Leading lines created by the flower's petals guide the viewer's gaze towards the subject. The image conveys a sense of tranquility and simplicity, with the bright colors and soft background evoking positive emotions.</p>
+                      </div>
+
+                      <!-- Overall Assessment Block -->
+                      <div class="analysis-content" id="overall-1" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Considering the low-level and high-level attributes, the image quality is quite good, with minor issues mainly stemming from the slight softness in sharpness and detail preservation. To improve the image further, ensuring greater stability during capture (using a tripod or faster shutter speed) could help mitigate any motion blur or camera shake. Enhancing the sharpness digitally through post-processing tools might also sharpen the details of the subject and background without introducing additional noise.</p>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Add 9 more carousel items -->
+              <div class="carousel-item" data-index="1">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/2.png" alt="Visual Quality Analysis Case 2" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    
+                    <!-- Score Box -->
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">78.1170</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    
+                    <!-- Analysis Control Buttons -->
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-2" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">
+                        Low-level
+                      </button>
+                      <button class="analysis-btn" data-target="high-level-2" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">
+                        High-level
+                      </button>
+                      <button class="analysis-btn" data-target="overall-2" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">
+                        Overall
+                      </button>
+                    </div>
+
+                    <!-- Analysis Content Container -->
+                    <div class="analysis-content-container">
+                      
+                      <!-- Low-level Analysis Block -->
+                      <div class="analysis-content active" id="low-level-2" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure appear well-managed, with a balanced distribution of light across the scene. There is neither significant underexposure nor overexposure, allowing for clear visibility of the leopard's fur pattern and the tree bark texture. The contrast is adequate, providing sufficient differentiation between the lighter and darker areas of the image. However, some areas exhibit slight blurring, possibly indicating motion or focus issues rather than inherent noise.</p>
+                      </div>
+
+                      <!-- High-level Analysis Block -->
+                      <div class="analysis-content" id="high-level-2" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is high, with the leopard being the focal point of the image. Its positioning, partially resting on the tree branch, draws attention directly to its face and upper body. The subject is in focus, with clear details in its fur and facial features, enhancing its lifelike appearance. Composition-wise, the image employs a natural framing technique using the tree branches, creating a sense of depth and context.</p>
+                      </div>
+
+                      <!-- Overall Assessment Block -->
+                      <div class="analysis-content" id="overall-2" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Considering both low-level and high-level attributes, the image quality is quite good, with only minor issues related to potential noise and slight blurring. To further enhance the image, applying noise reduction techniques could improve sharpness and detail preservation, particularly in uniform areas. Adjusting the focus or refining the composition to eliminate any minor distractions would elevate the overall presentation.</p>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" data-index="2">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/3.png" alt="Visual Quality Analysis Case 3" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    
+                    <!-- Score Box -->
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">20.3562</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    
+                    <!-- Analysis Control Buttons -->
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-3" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">
+                        Low-level
+                      </button>
+                      <button class="analysis-btn" data-target="high-level-3" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">
+                        High-level
+                      </button>
+                      <button class="analysis-btn" data-target="overall-3" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">
+                        Overall
+                      </button>
+                    </div>
+
+                    <!-- Analysis Content Container -->
+                    <div class="analysis-content-container">
+                      
+                      <!-- Low-level Analysis Block -->
+                      <div class="analysis-content active" id="low-level-3" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure appear to be adequate, with no significant underexposure or overexposure. However, the extreme saturation distorts the natural color balance, making the reds overly intense and the blues unnaturally vibrant. This affects the perception of exposure since it alters the true tonal values. Contrast is exaggerated due to the high saturation, creating a stark difference between light and dark areas that may lead to a loss of detail in some regions.</p>
+                      </div>
+
+                      <!-- High-level Analysis Block -->
+                      <div class="analysis-content" id="high-level-3" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is affected by the distorted colors, which diminish the separation between the bridge and the background. Despite this, the main structure remains recognizable. The composition uses leading lines effectively, guiding the viewer's eye along the bridge towards the horizon, and maintains a sense of balance with the positioning of the towers. The image does not strongly convey emotion or storytelling due to the artificial color treatment.</p>
+                      </div>
+
+                      <!-- Overall Assessment Block -->
+                      <div class="analysis-content" id="overall-3" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Considering the low-level and high-level attributes, the image suffers from significant distortion due to excessive color saturation, which negatively impacts its technical and aesthetic qualities. To improve the image, reducing the saturation would restore more natural colors and enhance detail visibility. Adjusting the contrast and exposure subtly could further refine the tonal balance.</p>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" data-index="3">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/4.png" alt="Visual Quality Analysis Case 4" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">69.4656</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-4" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">Low-level</button>
+                      <button class="analysis-btn" data-target="high-level-4" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">High-level</button>
+                      <button class="analysis-btn" data-target="overall-4" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">Overall</button>
+                    </div>
+                    <div class="analysis-content-container">
+                      <div class="analysis-content active" id="low-level-4" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure appear adequate, with no significant underexposure or overexposure. The horse and rider are well-lit, and details in both the subject and background are visible. However, there is a slight loss of detail in some brighter areas, possibly due to highlight clipping. Global sharpness and detail preservation are compromised, likely due to quantization artifacts, which manifest as blocky transitions and less defined edges.</p>
+                      </div>
+                      <div class="analysis-content" id="high-level-4" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is affected by the quantization artifacts, reducing the sharpness of the horse and rider's details. The composition follows standard equestrian jumping rules, with the subject centered and the action captured mid-air, creating a dynamic feel. The use of leading lines from the poles guides the viewer's eye towards the subject. Emotional expression is conveyed through the action and movement, evoking excitement and energy.</p>
+                      </div>
+                      <div class="analysis-content" id="overall-4" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Considering both low-level and high-level attributes, the image quality is impacted primarily by quantization artifacts, which affect sharpness and detail. Improvements could involve applying a dequantization filter to reduce blockiness and enhance detail preservation. Adjusting contrast and color saturation may also help restore the image's vibrancy and depth.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" data-index="4">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/5.png" alt="Visual Quality Analysis Case 5" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">38.9313</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-5" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">Low-level</button>
+                      <button class="analysis-btn" data-target="high-level-5" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">High-level</button>
+                      <button class="analysis-btn" data-target="overall-5" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">Overall</button>
+                    </div>
+                    <div class="analysis-content-container">
+                      <div class="analysis-content active" id="low-level-5" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure appear to be adequate, with no significant underexposure or overexposure. Details are visible in both the subject and the background, suggesting a balanced exposure level. However, the global sharpness and detail preservation are compromised due to pixelation, which affects the clarity of fine details. This pixelation likely stems from compression artifacts or low resolution, impacting the overall perception of sharpness.</p>
+                      </div>
+                      <div class="analysis-content" id="high-level-5" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is impacted by the pixelation, reducing the precision of the subject's features and contours. The woman is the focal point, but her details are not as crisp as they could be. The composition follows a casual, candid style, placing the subject slightly off-center, which works well for this scene. The use of shallow depth of field helps separate the subject from the background, creating a sense of focus.</p>
+                      </div>
+                      <div class="analysis-content" id="overall-5" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Considering both low-level and high-level attributes, the image quality is moderately affected by pixelation, which detracts from sharpness and detail. Improving resolution and addressing pixelation would significantly enhance the image's clarity and overall quality. Enhancing color saturation and contrast subtly could boost visual appeal.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" data-index="5">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/6.JPG" alt="Visual Quality Analysis Case 6" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">84.5715</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-6" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">Low-level</button>
+                      <button class="analysis-btn" data-target="high-level-6" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">High-level</button>
+                      <button class="analysis-btn" data-target="overall-6" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">Overall</button>
+                    </div>
+                    <div class="analysis-content-container">
+                      <div class="analysis-content active" id="low-level-6" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure appear well-managed, with a balanced distribution of light across the scene. There is neither significant underexposure nor overexposure, ensuring that details in both the subject and the background are visible. The contrast is adequate, providing clear differentiation between light and dark areas without appearing flat or excessively harsh. Global sharpness and detail preservation are satisfactory; however, some fine details might be slightly softened.</p>
+                      </div>
+                      <div class="analysis-content" id="high-level-6" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is high, with the subject being sharply focused against a softly blurred background. The facial features and details of the hair and accessories are clear and well-defined. The composition follows a natural and pleasing layout, with the subject positioned slightly off-center, creating a sense of balance. The emotional expression conveyed is gentle and serene, enhanced by the soft lighting and warm color palette.</p>
+                      </div>
+                      <div class="analysis-content" id="overall-6" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Considering both low-level and high-level attributes, the image quality is quite good, with only minor issues like slight softening of fine details and subtle glare. To further enhance the image, sharpening techniques could be applied carefully to improve detail clarity without introducing noise. The composition and subject clarity are already strong, but ensuring consistent lighting could elevate the overall presentation.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" data-index="6">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/7.JPG" alt="Visual Quality Analysis Case 7" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">79.5832</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-7" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">Low-level</button>
+                      <button class="analysis-btn" data-target="high-level-7" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">High-level</button>
+                      <button class="analysis-btn" data-target="overall-7" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">Overall</button>
+                    </div>
+                    <div class="analysis-content-container">
+                      <div class="analysis-content active" id="low-level-7" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure appear balanced, with a warm color palette dominating the scene. The lighting seems intentional, highlighting the tree and the train while maintaining some details in the darker areas. There is no significant underexposure or overexposure, suggesting a deliberate choice to create a mood rather than lose detail. Global sharpness and detail preservation are decent, with the tree branches and leaves having defined edges.</p>
+                      </div>
+                      <div class="analysis-content" id="high-level-7" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is high. The tree and train stand out as the focal points, with distinct outlines separating them from the background. Composition and layout are well-executed, with the tree dominating the center and drawing attention immediately. The train is positioned lower, adding balance and leading the viewer's eye across the image. Emotional expression and storytelling are strong, with warm tones and dramatic lighting evoking curiosity and wonder.</p>
+                      </div>
+                      <div class="analysis-content" id="overall-7" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Overall, the image demonstrates good quality with minor room for improvement. To enhance it further, one could consider slightly increasing the sharpness to bring out more detail in the tree and train. Adjusting the contrast subtly could deepen the shadows without losing information. The composition is already strong, but ensuring consistent focus throughout would elevate the image even more.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" data-index="7">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/8.PNG" alt="Visual Quality Analysis Case 8" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">75.0843</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-8" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">Low-level</button>
+                      <button class="analysis-btn" data-target="high-level-8" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">High-level</button>
+                      <button class="analysis-btn" data-target="overall-8" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">Overall</button>
+                    </div>
+                    <div class="analysis-content-container">
+                      <div class="analysis-content active" id="low-level-8" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure are fairly balanced, with sufficient illumination on the road and buildings, ensuring that essential details are visible. There is no significant underexposure or overexposure, although the bright sky slightly washes out some details in the upper part of the image. Global sharpness is decent, with clear outlines of the vehicles, road markings, and buildings. However, the fisheye lens introduces a notable distortion.</p>
+                      </div>
+                      <div class="analysis-content" id="high-level-8" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is compromised by the fisheye distortion, making it challenging to discern fine details of the buildings and objects. Composition-wise, the image uses a unique framing technique, drawing attention to the central area where the action occurs. The circular frame acts as a natural guide, directing the viewer's gaze effectively. The scene conveys a sense of urban life and movement.</p>
+                      </div>
+                      <div class="analysis-content" id="overall-8" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Overall, the image has a moderate level of quality, with strengths in color accuracy and composition but weaknesses in sharpness due to lens distortion. To improve the image, reducing the fisheye effect could help maintain the artistic vision while improving clarity. Enhancing the contrast slightly could add depth and dimensionality.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" data-index="8">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/9.PNG" alt="Visual Quality Analysis Case 9" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">38.0097</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-9" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">Low-level</button>
+                      <button class="analysis-btn" data-target="high-level-9" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">High-level</button>
+                      <button class="analysis-btn" data-target="overall-9" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">Overall</button>
+                    </div>
+                    <div class="analysis-content-container">
+                      <div class="analysis-content active" id="low-level-9" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure appear to be heavily influenced by atmospheric conditions, resulting in a hazy appearance that obscures details throughout the scene. The overall brightness seems adequate, but the haze causes a significant loss of detail in both near and far objects. Contrast is very low due to the uniformity of the foggy conditions, leading to a flat image where differentiation between light and dark areas is difficult.</p>
+                      </div>
+                      <div class="analysis-content" id="high-level-9" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is poor due to the haze, making it challenging to distinguish the subject from the background. The road and surrounding trees are indistinct, and the details of any moving vehicles or pedestrians are lost. Composition-wise, the image follows a linear perspective along the road, drawing the viewer's eye into the distance, but the effectiveness is diminished by the lack of clear focal points.</p>
+                      </div>
+                      <div class="analysis-content" id="overall-9" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Considering the analysis of both low-level and high-level attributes, the image quality is significantly impacted by the severe haze. To improve the image, one could consider capturing it under better weather conditions or using image processing techniques to reduce the haze and enhance detail. Adjusting the white balance and boosting color saturation might help restore some vibrancy.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="carousel-item" data-index="9">
+                <div class="carousel-content" style="display: flex; align-items: flex-start; height: 100%; padding: 2rem;">
+                  <div class="carousel-image" style="flex: 0 0 520px; padding-right: 2rem; position: relative;">
+                    <img src="./static/case/10.JPG" alt="Visual Quality Analysis Case 10" style="width: 100%; height: 380px; object-fit: cover; border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);">
+                    <div style="position: absolute; bottom: 10px; right: 40px; background: rgba(0, 0, 0, 0.6); border-radius: 8px; padding: 0.3rem 0.6rem; text-align: center; backdrop-filter: blur(5px);">
+                      <div style="font-size: 0.8rem; color: #ffffff; margin-bottom: 0.2rem;">Predicted Score</div>
+                      <div style="font-size: 1.2rem; font-weight: bold; color: #ffffff;">54.7504</div>
+                    </div>
+                  </div>
+                  <div class="carousel-text" style="flex: 1; text-align: left;">
+                    <div class="analysis-buttons" style="display: flex; gap: 0.8rem; margin-bottom: 1.5rem;">
+                      <button class="analysis-btn active" data-target="low-level-10" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3);">Low-level</button>
+                      <button class="analysis-btn" data-target="high-level-10" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3); opacity: 0.7;">High-level</button>
+                      <button class="analysis-btn" data-target="overall-10" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 25px; padding: 0.6rem 1.2rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">Overall</button>
+                    </div>
+                    <div class="analysis-content-container">
+                      <div class="analysis-content active" id="low-level-10" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px);">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #d63031; margin-bottom: 0.8rem;">🔍 Low-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">The image's brightness and exposure appear to be heavily influenced by the weather condition, resulting in a significant amount of rainfall. The overall scene is relatively dim, suggesting possible underexposure due to the heavy clouds and rain, which leads to a loss of detail in the darker areas. The contrast is low, with a lack of differentiation between light and dark areas, contributing to a flat appearance.</p>
+                      </div>
+                      <div class="analysis-content" id="high-level-10" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.1rem; font-weight: bold; color: #0984e3; margin-bottom: 0.8rem;">🎨 High-level Attribute Analysis</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Subject clarity is affected by the rain, making it challenging to distinguish the subject from the background. The composition uses leading lines created by the rain, guiding the viewer's eye through the image, but the overall layout is somewhat chaotic due to the weather. Emotional expression is strong, evoking a sense of tranquility and mystery, enhanced by the soft lighting and atmospheric effects.</p>
+                      </div>
+                      <div class="analysis-content" id="overall-10" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 8px; padding: 1.2rem; backdrop-filter: blur(5px); display: none;">
+                        <h4 style="font-size: 1.2rem; font-weight: bold; color: #00875a; margin-bottom: 0.8rem;">📊 Overall Assessment</h4>
+                        <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.5; color: #2d3436; margin: 0;">Considering both low-level and high-level attributes, the image quality is impacted significantly by the challenging shooting conditions. To improve image quality, using a polarizing filter could help reduce glare and enhance color saturation. Adjusting the exposure settings to better handle the bright highlights and dark shadows would improve detail retention.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Dot Indicators -->
+            <div class="carousel-dots" style="display: flex; justify-content: center; gap: 12px; margin-top: 2rem;">
+              <div class="dot active" data-index="0"></div>
+              <div class="dot" data-index="1"></div>
+              <div class="dot" data-index="2"></div>
+              <div class="dot" data-index="3"></div>
+              <div class="dot" data-index="4"></div>
+              <div class="dot" data-index="5"></div>
+              <div class="dot" data-index="6"></div>
+              <div class="dot" data-index="7"></div>
+              <div class="dot" data-index="8"></div>
+              <div class="dot" data-index="9"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Unified Glassmorphism Content Section -->
+  <section class="section" style="padding: 3rem 0;">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column is-four-fifths">
+          <div style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px) saturate(120%); -webkit-backdrop-filter: blur(20px) saturate(120%); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 24px; padding: 0; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1); overflow: hidden;">
+            
+            <!-- Navigation Tabs -->
+            <div style="background: rgba(255, 255, 255, 0.2); padding: 1.5rem 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.2);">
+              <div class="content-nav" style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <button class="nav-btn active" data-target="abstract" style="background: linear-gradient(45deg, #74b9ff, #0984e3); color: white; border: none; border-radius: 20px; padding: 0.8rem 1.5rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);">
+                  Abstract
+                </button>
+                <button class="nav-btn" data-target="motivation" style="background: linear-gradient(45deg, #ff7675, #fd79a8); color: white; border: none; border-radius: 20px; padding: 0.8rem 1.5rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 118, 117, 0.3); opacity: 0.7;">
+                  Motivation
+                </button>
+                <button class="nav-btn" data-target="framework" style="background: linear-gradient(45deg, #00b894, #00cec9); color: white; border: none; border-radius: 20px; padding: 0.8rem 1.5rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); opacity: 0.7;">
+                  Training Framework
+                </button>
+                <button class="nav-btn" data-target="results" style="background: linear-gradient(45deg, #fdcb6e, #e17055); color: white; border: none; border-radius: 20px; padding: 0.8rem 1.5rem; font-size: 0.9rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(253, 203, 110, 0.3); opacity: 0.7;">
+                  Experimental Results
+                </button>
+
+              </div>
+            </div>
+
+            <!-- Content Container -->
+            <div class="content-container" style="padding: 2.5rem;">
+              
+              <!-- Abstract Content -->
+              <div class="content-section active" id="abstract" style="background: rgba(235, 245, 255, 0.8); border-left: 4px solid #74b9ff; border-radius: 12px; padding: 2rem; backdrop-filter: blur(5px);">
+                <h2 style="font-size: 2rem; font-weight: bold; color: #0984e3; margin-bottom: 1.5rem; text-align: center;"> Abstract</h2>
+                <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.8; color: #2d3436; text-align: justify; margin: 0;">
+                  Recent studies demonstrate that multimodal large language models (MLLMs) can proficiently evaluate visual quality through interpretable assessments. However, existing approaches typically treat quality scoring and reasoning descriptions as separate tasks with disjoint optimization objectives, leading to a trade-off: models adept at quality reasoning descriptions struggle with precise score regression, while score-focused models lack interpretability. This limitation hinders the full potential of MLLMs in visual quality assessment, where accuracy and interpretability should be mutually reinforcing. To address this, we propose a unified two-stage training framework comprising a cold-start stage and a reinforcement learning-based fine-tuning stage. Specifically, in the first stage, we distill high-quality data from a teacher model through expert-designed prompts, initializing reasoning capabilities via cross-entropy loss supervision. In the second stage, we introduce a novel reward with Group Relative Policy Optimization (GRPO) to jointly optimize scoring accuracy and reasoning consistency. We designate the models derived from these two stages as <span style="background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: bold;">Q-Ponder-CI</span> and <span style="background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: bold;">Q-Ponder</span>. Extensive experiments show that Q-Ponder achieves state-of-the-art (SOTA) performance on quality score regression benchmarks, delivering up to 6.5% higher SRCC on cross-domain datasets. Furthermore, Q-Ponder significantly outperforms description-based SOTA models, including its teacher model Qwen-2.5-VL-72B, particularly in description accuracy and reasonableness, demonstrating the generalization potential over diverse tasks.
+                </p>
+              </div>
+
+              <!-- Motivation Content -->
+              <div class="content-section" id="motivation" style="background: rgba(255, 245, 235, 0.8); border-left: 4px solid #ff7675; border-radius: 12px; padding: 2rem; backdrop-filter: blur(5px); display: none;">
+                <h2 style="font-size: 2rem; font-weight: bold; color: #d63031; margin-bottom: 1.5rem; text-align: center;"> Motivation</h2>
+                <div style="text-align: center; margin-bottom: 2rem;">
+                  <img src="./static/images/figure1.png" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);">
+                </div>
+                <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.8; color: #2d3436; text-align: justify; margin: 0;">
+                  <strong>(a)</strong> A comprehensive, reasonable, and accurate "expert-level" reasoning process helps the model regress precise quality scores, while maintaining a certain level of robustness on out-of-distribution data during training.<br><br>
+                  <strong>(b)</strong> As the predicted score approaches the ground truth, the precision of the reasoning descriptions improves, indicating that it is possible to refine the model's reasoning process while simultaneously encouraging accurate score regression.
+                </p>
+              </div>
+
+              <!-- Training Framework Content -->
+              <div class="content-section" id="framework" style="background: rgba(245, 255, 235, 0.8); border-left: 4px solid #00b894; border-radius: 12px; padding: 2rem; backdrop-filter: blur(5px); display: none;">
+                <h2 style="font-size: 2rem; font-weight: bold; color: #00875a; margin-bottom: 1.5rem; text-align: center;"> Training Framework</h2>
+                <div style="text-align: center; margin-bottom: 2rem;">
+                  <img src="./static/images/pipeline1.png" style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);">
+                </div>
+                <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.8; color: #2d3436; text-align: justify; margin: 0;">
+                  Our unified two-stage training framework addresses the fundamental challenge of jointly optimizing scoring accuracy and reasoning consistency in visual quality assessment. The first stage employs a cold-start approach where we distill high-quality data from a teacher model through expert-designed prompts, initializing the model's reasoning capabilities via cross-entropy loss supervision. In the second stage, we introduce Group Relative Policy Optimization (GRPO) with a novel reward mechanism that jointly optimizes both scoring accuracy and reasoning consistency, ensuring that the model's interpretable assessments align with its quantitative predictions.
+                </p>
+              </div>
+
+              <!-- Experimental Results Content -->
+              <div class="content-section" id="results" style="background: rgba(255, 250, 235, 0.8); border-left: 4px solid #fdcb6e; border-radius: 12px; padding: 2rem; backdrop-filter: blur(5px); display: none;">
+                <h2 style="font-size: 2rem; font-weight: bold; color: #e17055; margin-bottom: 1.5rem; text-align: center;"> Experimental Results</h2>
+                
+                <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.8; color: #2d3436; text-align: justify; margin-bottom: 2rem;">
+                   
+                </p>
+
+                <!-- Table 1: Performance Comparison -->
+                <div style="margin-bottom: 3rem;">
+                  <h3 style="font-size: 1.4rem; font-weight: bold; color: #e17055; margin-bottom: 1rem; text-align: center;">Performance Comparison Across Dataset Categories</h3>
+                  <p style="font-size: 0.9rem; color: #636e72; text-align: center; margin-bottom: 1.5rem; font-style: italic;">
+                    Each cell shows PLCC / SRCC. <span style="background: #ffcccb; padding: 2px 4px; border-radius: 3px; font-weight: bold;">Top-1</span> and <span style="background: #add8e6; padding: 2px 4px; border-radius: 3px; font-weight: bold;">Top-2</span> results are highlighted.
+                  </p>
+                  
+                  <div style="overflow-x: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                    <table style="width: 100%; min-width: 800px; border-collapse: collapse; background: rgba(255, 255, 255, 0.9); font-size: 0.85rem;">
+                      <thead>
+                        <tr style="background: linear-gradient(45deg, #fdcb6e, #e17055); color: white;">
+                          <th style="padding: 12px 8px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3);">Methods</th>
+                          <th style="padding: 12px 8px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); font-size: 0.8rem;">KonIQ</th>
+                          <th style="padding: 12px 8px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); font-size: 0.8rem;">SPAQ</th>
+                          <th style="padding: 12px 8px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); font-size: 0.8rem;">LiveW</th>
+                          <th style="padding: 12px 8px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); font-size: 0.8rem;">KADID</th>
+                          <th style="padding: 12px 8px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); font-size: 0.8rem;">CSIQ</th>
+                          <th style="padding: 12px 8px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); font-size: 0.8rem;">AGIQA</th>
+                          <th style="padding: 12px 8px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3);">AVG.</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <!-- Handcrafted Methods -->
+                        <tr style="background: rgba(116, 185, 255, 0.2);">
+                          <td colspan="8" style="padding: 8px; text-align: center; font-weight: bold; color: #0984e3; border: 1px solid #ddd;">Handcrafted Methods</td>
+                        </tr>
+                        <tr style="background: rgba(255, 255, 255, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">NIQE</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.533 / 0.530</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.679 / 0.664</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.493 / 0.449</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.468 / 0.405</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.718 / 0.628</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.560 / 0.533</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.575 / 0.535</td>
+                        </tr>
+                        <tr style="background: rgba(248, 249, 250, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">BRISQUE</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.225 / 0.226</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.490 / 0.406</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.361 / 0.313</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.429 / 0.356</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.740 / 0.556</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.541 / 0.497</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.464 / 0.392</td>
+                        </tr>
+                        
+                        <!-- Deep-learning Methods -->
+                        <tr style="background: rgba(0, 184, 148, 0.2);">
+                          <td colspan="8" style="padding: 8px; text-align: center; font-weight: bold; color: #00875a; border: 1px solid #ddd;">Deep-learning Methods</td>
+                        </tr>
+                        <tr style="background: rgba(255, 255, 255, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">NIMA</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.896 / 0.859</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.838 / 0.856</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.814 / 0.711</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.532 / 0.535</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.695 / 0.649</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.715 / 0.654</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.748 / 0.711</td>
+                        </tr>
+                        <tr style="background: rgba(248, 249, 250, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">HyperIQA</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.917 / 0.906</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.791 / 0.788</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.772 / 0.701</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.506 / 0.468</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.752 / 0.717</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.702 / 0.640</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.740 / 0.703</td>
+                        </tr>
+                        <tr style="background: rgba(255, 255, 255, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">DBCNN</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.884 / 0.875</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.812 / 0.806</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.773 / 0.755</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.497 / 0.484</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.586 / 0.572</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.730 / 0.641</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.714 / 0.689</td>
+                        </tr>
+                        <tr style="background: rgba(248, 249, 250, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">MUSIQ</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.924 / 0.929</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.868 / 0.863</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.789 / 0.830</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.575 / 0.556</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.771 / 0.710</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.722 / 0.630</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.775 / 0.753</td>
+                        </tr>
+                        <tr style="background: rgba(255, 255, 255, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">CLIP-IQA+</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.909 / 0.895</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.866 / 0.854</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.832 / 0.805</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.653 / 0.642</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.772 / 0.719</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.736 / 0.685</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.795 / 0.767</td>
+                        </tr>
+                        <tr style="background: rgba(248, 249, 250, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">ManIQA</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.849 / 0.834</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.768 / 0.758</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.849 / 0.832</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.499 / 0.465</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.623 / 0.627</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.723 / 0.636</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.719 / 0.692</td>
+                        </tr>
+
+                        <!-- MLLM-based Methods -->
+                        <tr style="background: rgba(162, 155, 254, 0.2);">
+                          <td colspan="8" style="padding: 8px; text-align: center; font-weight: bold; color: #6c5ce7; border: 1px solid #ddd;">MLLM-based Methods</td>
+                        </tr>
+                        <tr style="background: rgba(255, 255, 255, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">C2Score</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.923 / 0.910</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.867 / 0.860</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.786 / 0.772</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.500 / 0.453</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.735 / 0.705</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.777 / 0.671</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.765 / 0.729</td>
+                        </tr>
+                        <tr style="background: rgba(248, 249, 250, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">Q-Align</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #add8e6;">0.941 / 0.940</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.886 / 0.887</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.853 / 0.860</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.674 / 0.684</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.671 / 0.737</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.772 / 0.735</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.799 / 0.807</td>
+                        </tr>
+                        <tr style="background: rgba(255, 255, 255, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">DeQA</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #ffcccb;">0.953 / 0.941</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.895 / 0.896</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #ffcccb;">0.892 / 0.879</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.694 / 0.687</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #add8e6;">0.787 / 0.744</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.809 / 0.729</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #add8e6;">0.838 / 0.813</td>
+                        </tr>
+                        <tr style="background: rgba(248, 249, 250, 0.8);">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: 500;">Q-Insight</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.918 / 0.895</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #add8e6;">0.903 / 0.899</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.870 / 0.839</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #ffcccb;">0.702 / 0.702</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.685 / 0.640</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #add8e6;">0.816 / 0.766</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.816 / 0.790</td>
+                        </tr>
+                        <tr style="background: rgba(253, 203, 110, 0.3); font-weight: bold;">
+                          <td style="padding: 8px; border: 1px solid #ddd; font-weight: bold;">Q-Ponder</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd;">0.937 / 0.926</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #ffcccb;">0.904 / 0.906</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #add8e6;">0.882 / 0.848</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #add8e6;">0.693 / 0.701</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #ffcccb;">0.832 / 0.792</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #ffcccb;">0.821 / 0.755</td>
+                          <td style="padding: 8px; text-align: center; border: 1px solid #ddd; background: #ffcccb;">0.845 / 0.821</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                                 <!-- Table 2: Reasoning Description Comparison -->
+                 <div style="margin-bottom: 2rem;">
+                   <h3 style="font-size: 1.4rem; font-weight: bold; color: #e17055; margin-bottom: 1rem; text-align: center;">Reasoning Description Quality Comparison</h3>
+                   <p style="font-size: 0.9rem; color: #636e72; text-align: center; margin-bottom: 1rem; font-style: italic;">
+                     Quantitative comparison across six datasets. Values represent three key metrics:
+                   </p>
+                   
+                   <!-- Metric Legend -->
+                   <div style="display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                     <div style="display: flex; align-items: center; gap: 0.5rem;">
+                       <div style="width: 16px; height: 16px; background: linear-gradient(45deg, #74b9ff, #0984e3); border-radius: 50%;"></div>
+                       <span style="font-size: 0.85rem; color: #2d3436; font-weight: 500;">Completeness</span>
+                     </div>
+                     <div style="display: flex; align-items: center; gap: 0.5rem;">
+                       <div style="width: 16px; height: 16px; background: linear-gradient(45deg, #00b894, #00cec9); border-radius: 50%;"></div>
+                       <span style="font-size: 0.85rem; color: #2d3436; font-weight: 500;">Accuracy</span>
+                     </div>
+                     <div style="display: flex; align-items: center; gap: 0.5rem;">
+                       <div style="width: 16px; height: 16px; background: linear-gradient(45deg, #fdcb6e, #e17055); border-radius: 50%;"></div>
+                       <span style="font-size: 0.85rem; color: #2d3436; font-weight: 500;">Reasonableness</span>
+                     </div>
+                   </div>
+                   
+                   <div style="overflow-x: auto; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+                     <table style="width: 100%; min-width: 900px; border-collapse: collapse; background: rgba(255, 255, 255, 0.9); font-size: 0.9rem;">
+                       <thead>
+                         <tr style="background: linear-gradient(45deg, #fdcb6e, #e17055); color: white;">
+                           <th style="padding: 15px 10px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); width: 100px;">Methods</th>
+                           <th style="padding: 15px 10px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); width: 130px;">CIDIQ</th>
+                           <th style="padding: 15px 10px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); width: 130px;">CSIQ</th>
+                           <th style="padding: 15px 10px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); width: 130px;">KADID</th>
+                           <th style="padding: 15px 10px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); width: 130px;">LIVE</th>
+                           <th style="padding: 15px 10px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); width: 130px;">TID2008</th>
+                           <th style="padding: 15px 10px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); width: 130px;">TID2013</th>
+                           <th style="padding: 15px 10px; text-align: center; font-weight: bold; border: 1px solid rgba(255,255,255,0.3); width: 80px;">AVG.</th>
+                         </tr>
+                       </thead>
+                       <tbody>
+                         <tr style="background: rgba(255, 255, 255, 0.8);">
+                           <td style="padding: 15px 8px; border: 1px solid #ddd; font-weight: 500; text-align: center;">Co-Instruct</td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.026</div>
+                               <div style="color: #00875a; font-weight: 500;">1.288</div>
+                               <div style="color: #e17055; font-weight: 500;">2.192</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.446</div>
+                               <div style="color: #00875a; font-weight: 500;">1.772</div>
+                               <div style="color: #e17055; font-weight: 500;">2.594</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.198</div>
+                               <div style="color: #00875a; font-weight: 500;">1.530</div>
+                               <div style="color: #e17055; font-weight: 500;">2.266</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.479</div>
+                               <div style="color: #00875a; font-weight: 500;">1.864</div>
+                               <div style="color: #e17055; font-weight: 500;">2.628</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.280</div>
+                               <div style="color: #00875a; font-weight: 500;">1.648</div>
+                               <div style="color: #e17055; font-weight: 500;">2.346</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.240</div>
+                               <div style="color: #00875a; font-weight: 500;">1.562</div>
+                               <div style="color: #e17055; font-weight: 500;">2.364</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd; font-weight: bold; font-size: 1.1rem;">2.096</td>
+                         </tr>
+                         
+                         <tr style="background: rgba(248, 249, 250, 0.8);">
+                           <td style="padding: 15px 8px; border: 1px solid #ddd; font-weight: 500; text-align: center;">Q-Instruct</td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.164</div>
+                               <div style="color: #00875a; font-weight: 500;">1.510</div>
+                               <div style="color: #e17055; font-weight: 500;">2.478</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.424</div>
+                               <div style="color: #00875a; font-weight: 500;">2.110</div>
+                               <div style="color: #e17055; font-weight: 500;">2.904</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.018</div>
+                               <div style="color: #00875a; font-weight: 500;">1.502</div>
+                               <div style="color: #e17055; font-weight: 500;">2.428</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.481</div>
+                               <div style="color: #00875a; font-weight: 500;">2.158</div>
+                               <div style="color: #e17055; font-weight: 500;">2.999</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.153</div>
+                               <div style="color: #00875a; font-weight: 500;">1.722</div>
+                               <div style="color: #e17055; font-weight: 500;">2.630</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.084</div>
+                               <div style="color: #00875a; font-weight: 500;">1.594</div>
+                               <div style="color: #e17055; font-weight: 500;">2.520</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd; font-weight: bold; font-size: 1.1rem;">2.216</td>
+                         </tr>
+                         
+                         <tr style="background: rgba(255, 255, 255, 0.8);">
+                           <td style="padding: 15px 8px; border: 1px solid #ddd; font-weight: 500; text-align: center;">DepictQA</td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.394</div>
+                               <div style="color: #00875a; font-weight: 500;">1.798</div>
+                               <div style="color: #e17055; font-weight: 500;">2.914</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.510</div>
+                               <div style="color: #00875a; font-weight: 500;">2.342</div>
+                               <div style="color: #e17055; font-weight: 500;">3.046</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.156</div>
+                               <div style="color: #00875a; font-weight: 500;">1.590</div>
+                               <div style="color: #e17055; font-weight: 500;">2.588</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.668</div>
+                               <div style="color: #00875a; font-weight: 500;">2.256</div>
+                               <div style="color: #e17055; font-weight: 500;">3.240</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.614</div>
+                               <div style="color: #00875a; font-weight: 500;">2.008</div>
+                               <div style="color: #e17055; font-weight: 500;">3.304</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: 500;">2.458</div>
+                               <div style="color: #00875a; font-weight: 500;">1.876</div>
+                               <div style="color: #e17055; font-weight: 500;">3.078</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd; font-weight: bold; font-size: 1.1rem;">2.454</td>
+                         </tr>
+                         
+                         <tr style="background: rgba(253, 203, 110, 0.3); font-weight: bold;">
+                           <td style="padding: 15px 8px; border: 1px solid #ddd; font-weight: bold; text-align: center;">Q-Ponder</td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: bold; font-size: 1.05rem;">4.100</div>
+                               <div style="color: #00875a; font-weight: bold; font-size: 1.05rem;">3.140</div>
+                               <div style="color: #e17055; font-weight: bold; font-size: 1.05rem;">4.392</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: bold; font-size: 1.05rem;">4.440</div>
+                               <div style="color: #00875a; font-weight: bold; font-size: 1.05rem;">4.160</div>
+                               <div style="color: #e17055; font-weight: bold; font-size: 1.05rem;">4.744</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: bold; font-size: 1.05rem;">4.175</div>
+                               <div style="color: #00875a; font-weight: bold; font-size: 1.05rem;">3.402</div>
+                               <div style="color: #e17055; font-weight: bold; font-size: 1.05rem;">4.283</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: bold; font-size: 1.05rem;">4.457</div>
+                               <div style="color: #00875a; font-weight: bold; font-size: 1.05rem;">3.794</div>
+                               <div style="color: #e17055; font-weight: bold; font-size: 1.05rem;">4.630</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: bold; font-size: 1.05rem;">4.328</div>
+                               <div style="color: #00875a; font-weight: bold; font-size: 1.05rem;">3.931</div>
+                               <div style="color: #e17055; font-weight: bold; font-size: 1.05rem;">4.617</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd;">
+                             <div style="line-height: 1.4;">
+                               <div style="color: #0984e3; font-weight: bold; font-size: 1.05rem;">4.311</div>
+                               <div style="color: #00875a; font-weight: bold; font-size: 1.05rem;">3.697</div>
+                               <div style="color: #e17055; font-weight: bold; font-size: 1.05rem;">4.561</div>
+                             </div>
+                           </td>
+                           <td style="padding: 15px 8px; text-align: center; border: 1px solid #ddd; font-weight: bold; color: #e17055; font-size: 1.3rem;">4.182</td>
+                         </tr>
+                       </tbody>
+                     </table>
+                   </div>
+                 </div>
+
+                <p style="font-family: 'Times New Roman', Times, serif; font-size: 1.1rem; line-height: 1.8; color: #2d3436; text-align: justify; margin: 0;">
+                   
+                </p>
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Content Navigation Script
+    document.addEventListener('DOMContentLoaded', function() {
+      // Navigation functionality for content sections
+      const navBtns = document.querySelectorAll('.nav-btn');
+      const contentSections = document.querySelectorAll('.content-section');
+
+      function showContentSection(targetId, container) {
+        // Hide all content sections
+        const sections = container.querySelectorAll('.content-section');
+        sections.forEach(section => {
+          section.style.display = 'none';
+          section.classList.remove('active');
+        });
+
+        // Show target section
+        const targetSection = container.querySelector(`#${targetId}`);
+        if (targetSection) {
+          targetSection.style.display = 'block';
+          targetSection.classList.add('active');
+        }
+
+        // Update navigation buttons
+        const navBtns = container.querySelectorAll('.nav-btn');
+        navBtns.forEach(btn => {
+          btn.classList.remove('active');
+          btn.style.opacity = '0.7';
+        });
+
+        const activeBtn = container.querySelector(`.nav-btn[data-target="${targetId}"]`);
+        if (activeBtn) {
+          activeBtn.classList.add('active');
+          activeBtn.style.opacity = '1';
+        }
+      }
+
+      // Add click listeners to navigation buttons
+      navBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const targetId = this.getAttribute('data-target');
+          const container = this.closest('.container');
+          showContentSection(targetId, container);
+        });
+      });
+
+      // Initialize - show first section
+      const firstContainer = document.querySelector('.content-container');
+      if (firstContainer) {
+        showContentSection('abstract', firstContainer);
+      }
+    });
+  </script>
+
+  <!-- BibTeX Citation Section -->
+  <section style="padding: 3rem 0; background: rgba(0,0,0,0.05);">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 2rem;">
+      <div style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(20px); border-radius: 20px; padding: 2.5rem; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);">
+                <h2 style="font-size: 2rem; font-weight: bold; color: #000000; margin-bottom: 1.5rem; text-align: center;">
+           BibTeX Citation
+        </h2>
+        
+        <div style="background: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 1.5rem; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 0.95rem; line-height: 1.6; color: #000000; overflow-x: auto; border: 1px solid rgba(0, 0, 0, 0.1); position: relative;">
+          <button onclick="copyBibTeX()" style="position: absolute; top: 10px; right: 10px; background: rgba(253, 203, 110, 0.2); border: 1px solid rgba(253, 203, 110, 0.5); border-radius: 6px; padding: 0.4rem 0.8rem; color: #fdcb6e; font-size: 0.8rem; cursor: pointer; transition: all 0.3s ease;">
+            📋 Copy
+          </button>
+          
+                    <pre style="margin: 0; color: #000000; white-space: pre-wrap; word-wrap: break-word;"><code id="bibtex-code">@article{yuan2025enhancing,
+  title={Enhancing Visual Grounding for GUI Agents via Self-Evolutionary Reinforcement Learning},
+  author={Yuan, Xinbin and Zhang, Jian and Li, Kaixin and Cai, Zhuoxuan and Yao, Lujian and Chen, Jie and Wang, Enguang and Hou, Qibin and Chen, Jinwei and Jiang, Peng-Tao and others},
+  journal={arXiv preprint arXiv:2505.12370},
+  year={2025}
+}</code></pre>
+        </div>
+        
+        <p style="text-align: center; color: #636e72; font-size: 0.9rem; margin-top: 1rem; font-style: italic;">
+          If you find our work helpful, please consider citing our paper. Thank you! 🙏
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simple footer without glassmorphism -->
+  <div style="text-align: center; padding: 2rem 0; margin-top: 2rem;">
+    <p style="color: #000000; font-weight: bold; font-size: 1.1rem; margin: 0;">
+      This project is hosted by vivo Mobile Communication Co., Ltd.
+            </p>
+          </div>
+
+  <script>
+    function copyBibTeX() {
+      const bibtexCode = document.getElementById('bibtex-code').textContent;
+      navigator.clipboard.writeText(bibtexCode).then(function() {
+        const button = event.target;
+        const originalText = button.textContent;
+        button.textContent = '✅ Copied!';
+        button.style.background = 'rgba(0, 184, 148, 0.2)';
+        button.style.borderColor = 'rgba(0, 184, 148, 0.5)';
+        button.style.color = '#00b894';
+        
+        setTimeout(function() {
+          button.textContent = originalText;
+          button.style.background = 'rgba(253, 203, 110, 0.2)';
+          button.style.borderColor = 'rgba(253, 203, 110, 0.5)';
+          button.style.color = '#fdcb6e';
+        }, 2000);
+      }).catch(function(err) {
+        console.error('Failed to copy text: ', err);
+      });
+    }
+  </script>
+
+</body>
+
+</html>
